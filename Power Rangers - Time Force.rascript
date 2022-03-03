@@ -71,11 +71,14 @@ function ShootTaken() => byte(0x00C5FF)
 //          0x03 = Shadow Force Megazord Blue Mode
 function ZordID() => byte(0x012000)
 
+function RengersRemaining() => byte(0x00c5fc)
 // $012002: Losses in Megazord Battle
 //          0x03 = Shadow Force Megazord Unlocked
 function LossesZord() => byte(0x012002)
 
 function NormalOrLess() => Difficulty() <= 0x01
+
+function WinCond() => (prev(State()) == 0x10 || prev(State()) == 0x11) && State() == 0x0b
 
 function ProgressAchievements(diff,stage,point){
     if(diff<2)
@@ -83,13 +86,15 @@ function ProgressAchievements(diff,stage,point){
             title = Levels[stage],
             description = "Complete " + Levels[stage] + " Level (on " + DifficultyLookUp[diff] + " or less)",
             points = point,
-            trigger = LevelID() == stage && NormalOrLess() && (prev(State()) == 0x10 || prev(State()) == 0x11) && State() == 0x0b)
+            trigger = WinCond() && LevelID() == stage && NormalOrLess()
+        )
     else
         achievement(
             title = Levels[stage] + " Hard",
             description = "Complete " + Levels[stage] + " Level (on " + DifficultyLookUp[diff] + ")",
             points = point,
-            trigger = LevelID() == stage && !NormalOrLess() && (prev(State()) == 0x10 || prev(State()) == 0x11) && State() == 0x0b)
+            trigger = WinCond() && LevelID() == stage && !NormalOrLess()
+        )
 }
 
 
@@ -98,16 +103,25 @@ function CollectablesAchievements(stage){
         title = "Vortex Collector " + Levels[stage],
         description = "Collect Both Extra Vortex Shoots in " + Levels[stage] + " Level",
         points = 2,
-        trigger = State() == 0x02 && LevelID() == stage && (prev(ExtraShoots()) + prev(ShootTaken()) == 0x01) && (ExtraShoots() + ShootTaken() == 0x02)
+        trigger = State() == 0x02 && LevelID() == stage && prev(ExtraShoots()) + prev(ShootTaken()) == 0x01 && ExtraShoots() + ShootTaken() == 0x02
     )
 }
 
 
+function ChallengeAchievement(stage){
+    achievement(
+        title = Levels[stage] + " Perfect",
+        description = "Complete " + Levels[stage] + " Level with all ranges remaining",
+        points = 5,
+        trigger = WinCond() && LevelID() == stage && RengersRemaining() == 0x00 
+    )
+}
 
 for i in Levels{
     ProgressAchievements(1,i,3)
     ProgressAchievements(2,i,4)
     CollectablesAchievements(i)
+    ChallengeAchievement(i)
 }
 
 
