@@ -70,11 +70,11 @@ function ArcadeModeCharsAnyDiff(char){
     description = "Complete arcade mode with " + CharacterDic[char],
     points = 3,
     trigger = CPUon() && never(CharacterID() != char) && never(Mode2on2flag() != 0x00) && never(ModeEnduranceflag() != 0x00) && never(ModeTournamentflag() != 0x00) && never(ModePracticeflag() != 0x00) &&
-            (tally(6,((RoundResult() == 0x01 && prev(TowerPosition()) < TowerPosition()))) && TowerDiff() == 0x00 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()|| 
-             tally(7,((RoundResult() == 0x01 && prev(TowerPosition()) < TowerPosition()))) && TowerDiff() == 0x01 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(8,((RoundResult() == 0x01 && prev(TowerPosition()) < TowerPosition()))) && TowerDiff() == 0x02 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(9,((RoundResult() == 0x01 && prev(TowerPosition()) < TowerPosition()))) && TowerDiff() == 0x03 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(9,((RoundResult() == 0x01 && prev(TowerPosition()) < TowerPosition()))) && TowerDiff() == 0x04 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin())
+            (tally(6,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x00 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()|| 
+             tally(7,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x01 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
+             tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x02 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
+             tally(9,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x03 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
+             tally(9,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x04 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin())
             )
 }
 
