@@ -24,14 +24,18 @@ CharacterDic = {0x00: "Scorpion",
                 0x12: "Baraka",
                 0x13: "Mileena",
                 0x14: "Cyrax",
-                0x15: "Kun Lao",
+                0x15: "Kung Lao",
                 0x16: "Sektor"}
+
+function MenuScreen() => byte(0x336298)
 
 function TowerDiff() => byte(0x324734)
 
+function CombatFlag() => byte(0x337ca0)
+
 function Mode2on2flag() => byte(0x21f044)
 
-function ModeEnduranceflag() => byte(0x3377bc)
+function ModeEnduranceflag() => byte(0x3377a8)
 
 function ModeTournamentflag() => byte(0x3377c0)
 
@@ -64,18 +68,30 @@ TowerDiffDic = {0x00: "Novice",
                 0x03: "Master",
                 0x04: "Master II"}
                 
+function AltsArcadeMode() => tally(6,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x00 
+                             && trigger_when(OptionsRoundsToWin() == P1RoundsWinned()) && trigger_when(prev(P1RoundsWinned()) < OptionsRoundsToWin())|| 
+                             tally(7,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x01 
+                             && trigger_when(OptionsRoundsToWin() == P1RoundsWinned()) && trigger_when(prev(P1RoundsWinned()) < OptionsRoundsToWin())||
+                             tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x02 
+                             && trigger_when(OptionsRoundsToWin() == P1RoundsWinned()) && trigger_when(prev(P1RoundsWinned()) < OptionsRoundsToWin())||
+                             tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x03 
+                             && trigger_when(OptionsRoundsToWin() == P1RoundsWinned()) && trigger_when(prev(P1RoundsWinned()) < OptionsRoundsToWin())||
+                             tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x04 
+                             && trigger_when(OptionsRoundsToWin() == P1RoundsWinned()) && trigger_when(prev(P1RoundsWinned()) < OptionsRoundsToWin())
+
+function AltsEnduranceMode() => tally(6,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x00 || 
+                                tally(7,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x01 ||
+                                tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x02 ||
+                                tally(8 ,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x03 ||
+                                tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01 && CombatFlag() == 0x01 && CPUon())) && TowerDiff() == 0x04
+                
 function ArcadeModeCharsAnyDiff(char){
     achievement(
     title = CharacterDic[char],
-    description = "Complete arcade mode with " + CharacterDic[char],
-    points = 3,
-    trigger = CPUon() && never(CharacterID() != char) && never(Mode2on2flag() != 0x00) && never(ModeEnduranceflag() != 0x00) && never(ModeTournamentflag() != 0x00) && never(ModePracticeflag() != 0x00) &&
-            (tally(6,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x00 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()|| 
-             tally(7,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x01 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(8,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x02 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(9,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x03 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin()||
-             tally(9,((prev(TowerPosition()) < TowerPosition()) && RoundResult() == 0x01)) && TowerDiff() == 0x04 && OptionsRoundsToWin() == P1RoundsWinned() && prev(P1RoundsWinned()) < OptionsRoundsToWin())
-            )
+    description = "Complete Arcade mode 1v1 with just " + CharacterDic[char] + " (P1, Any Difficulty)",
+    points = 5,
+    trigger = never(CharacterID() != char) && never(Mode2on2flag() != 0x00) && never(ModeEnduranceflag() != 0x00) && never(ModeTournamentflag() != 0x00) &&
+            never(CombatFlag() == 0x00 && MenuScreen() == 0x06) && AltsArcadeMode())
 }
 
 
@@ -84,8 +100,21 @@ for i in CharacterDic{
 }
 
 
+function UltimateEnduranceFlag() => byte(0x3377bc)
+
+achievement(
+    title = "Endurance Warrior",
+    description = "Complete endurance mode, any difficulty (No Goro)",
+    points = 5,
+    trigger = trigger_when(RoundResult() == 0x01) && prev(RoundResult()) == 0x00 && never(ModeEnduranceflag() == 0x00) && never(UltimateEnduranceFlag() == 0x01) && CombatFlag() == 0x01 && AltsEnduranceMode() 
+)
 
 
+function AltCustom() => byte(0x315474)
 
-
-
+achievement(
+    title = "Chameleon",
+    description = "Complete Arcade Mode 1v1 with an alt custome (P1, Any Difficulty)",
+    points = 3,
+    trigger = never(Mode2on2flag() != 0x00) && never(ModeEnduranceflag() != 0x00) && never(ModeTournamentflag() != 0x00) && never(ModePracticeflag() != 0x00) && 
+            never(CombatFlag() == 0x00 && MenuScreen() == 0x06) && AltsArcadeMode() && AltCustom() != 0x00)
