@@ -31,7 +31,7 @@ function MenuScreen() => byte(0x336298)
 
 function TowerDiff() => byte(0x324734)
 
-function CombatFlag() => byte(0x337ca0)
+function CombatFlag() => byte(0x316238)
 
 function Mode2on2flag() => byte(0x21f044)
 
