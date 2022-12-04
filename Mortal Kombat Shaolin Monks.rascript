@@ -77,7 +77,8 @@ kung_lao_fatalities = {
 0x1fb: "Head Toss",
 0x1ff: "Many Chops",
 0x201: "Headache",
-0x203: "Buzzsaw"
+0x203: "Buzzsaw",
+0x1fd: "Unfriendly Rabbit"
 }
 
 sub_zero_fatalities = {
@@ -116,7 +117,7 @@ function achiev_event(title, description, area_id, event_id, points, cheevo_id) 
 function check_no_upgrades() => player_life_upgrades() < 0x02 && p1_special_move_square() == 0x01 && p1_special_move_triangle() == 0x01 && p1_special_move_circle() == 0x01 && p1_special_move_r2() == 0x01
                                 && p1_combo1_unlocked() == 0x00 && p1_combo2_unlocked() == 0x00 && p1_combo3_unlocked() == 0x00 && p1_combo4_unlocked() == 0x00 && p1_combo5_unlocked() == 0x00
                                 
-function check_all_upgrades(total) =>  p1_special_move_square() + p1_special_move_square() + p1_special_move_circle() + p1_special_move_r2() + p1_combo1_unlocked() + p1_combo2_unlocked() + p1_combo3_unlocked()
+function check_all_upgrades(total) =>  p1_special_move_square() + p1_special_move_triangle() + p1_special_move_circle() + p1_special_move_r2() + p1_combo1_unlocked() + p1_combo2_unlocked() + p1_combo3_unlocked()
                                          + p1_combo4_unlocked() + p1_combo5_unlocked() == total && prev(p1_special_move_square() + p1_special_move_square() + p1_special_move_circle() + p1_special_move_r2() 
                                          + p1_combo1_unlocked() + p1_combo2_unlocked() + p1_combo3_unlocked()+ p1_combo4_unlocked() + p1_combo5_unlocked()) == total-1  
 
@@ -151,6 +152,7 @@ achievement(title = "Proof of Speed",
             trigger = is_singleplayer() && end_game() && prev(game_state()) == gs_gameplay && game_time() <= 0x57e40)
 
 //Misc
+//Fatalities
            
 achievement(title = "Healthy Monk",
             description = "Obtain all health upgrades.",
@@ -194,6 +196,21 @@ for fatalitie in scorpion_fatalities {
                 )
 }
 
+//Multalities
+achievement(title = "Dragons Fury",
+            description = "Liu Kang: Perform Dragons Fury Multality.",
+            points = 3,
+            trigger = is_singleplayer() && in_game() && p1_animation() == 0x161
+            )
+
+achievement(title = "Hat Control",
+            description = "Kung Lao: Perform Hat Control Multality.",
+            points = 3,
+            trigger = is_singleplayer() && in_game() && p1_animation() == 0x1f6
+            )
+
+//Upgrades
+
 achievement(title = "Dragon Master",
            description = "Liu Kang: Unlock all move upgrades.",
            points = 10,
@@ -217,6 +234,8 @@ achievement(title = "Shirai Ryu Master",
            points = 10,
            trigger = is_singleplayer() && in_game() && check_all_upgrades(char_upgrades["Scorpion"]) && p1_char() == characters["Scorpion"]
 )
+
+//Unlockables
 
 achievement(title = "Only Smoke Knows How To Play MK2",
             description = "Unlock MKII.",
